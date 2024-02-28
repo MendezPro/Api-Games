@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <title>StoreGames</title>
+    <style>
+        body {
+            background-color: #0f3b36;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .title {
+            padding: 2px;
+            background-color: rgba(32, 138, 105, 0.973);
+
+        }
+
+        .content {
+            background-color: #0f3b36;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome {
+            text-align: center;
+            color: #ffffff;
+            font-size: 1.5em;
+            padding: 20px;
+            background-color: #f58181;
+            border-radius: 10px;
+            margin: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .informa {
+            text-align: center;
+            color: #ffffff;
+            font-size: 1.5em;
+            padding: 20px;
+            background-color: #002677;
+            border-radius: 10px;
+            margin: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content-images {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .image-container {
+            position: relative;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .info-btn {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .info-btn:hover {
+            background-color: #45a049;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* ... (resto de los estilos) */
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 20px;
+            width: 80%;
+            background-color: #fefefe;
+            border-radius: 8px;
+        }
+
+        #modalImage {
+            max-width: 100%;
+            /* La imagen se ajustará al ancho máximo de la modal */
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            /* Centrar la imagen horizontalmente */
+        }
+
+        /* ... (resto de los estilos) */
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Left transition */
+        li.left {
+            -webkit-transition: -webkit-transform 250ms ease;
+            -webkit-transform: translateX(-100%);
+            -moz-transition: -moz-transform 250ms ease;
+            -moz-transform: translateX(-100%);
+            -o-transition: -o-transform 250ms ease;
+            -o-transform: translateX(-100%);
+            transition: transform 250ms ease;
+            transform: translateX(-100%);
+        }
+
+        /* Right transition */
+        li.right {
+            -webkit-transition: -webkit-transform 250ms ease;
+            -webkit-transform: translateX(100%);
+            -moz-transition: -moz-transform 250ms ease;
+            -moz-transform: translateX(100%);
+            -o-transition: -o-transform 250ms ease;
+            -o-transform: translateX(100%);
+            transition: transform 250ms ease;
+            transform: translateX(100%);
+        }
+
+        /* Border bottom for the previous button during the transition*/
+        li.left a.ui-btn,
+        li.right a.ui-btn {
+            border-top-width: 0;
+            border-left-width: 1px;
+            border-right-width: 1px;
+        }
+
+        li a.ui-btn.border-bottom {
+            border-bottom-width: 1px;
+        }
+
+        /* Hide the delete button on touch devices */
+        ul.touch li.ui-li-has-alt a.delete {
+            display: none;
+        }
+
+        ul.touch li.ui-li-has-alt a.ui-btn {
+            margin-right: 0;
+        }
+
+        /* Styling for the popup */
+        #confirm p {
+            text-align: center;
+            font-size: inherit;
+            margin-bottom: .75em;
+        }
+
+        .tablist-left {
+            width: 25%;
+            display: inline-block;
+        }
+
+        .tablist-content {
+            width: 60%;
+            display: inline-block;
+            vertical-align: top;
+            margin-left: 5%;
+        }
+
+
+        /* Estilo para el contenedor del formulario */
+        [data-role="content"] {
+            padding: 20px;
+        }
+
+        /* Estilo para los campos de entrada de texto */
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 0px;
+            border: 2px solid #ffffff;
+            /* Color del borde */
+            border-radius: 5px;
+            /* Radio del borde */
+            box-sizing: border-box;
+            color: #000000;
+            /* Color del texto */
+            background-color: #f7f09b;
+        }
+
+        /* Estilo para las etiquetas de los campos */
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #000000;
+            /* Color del texto */
+        }
+
+        /* Estilo para el botón */
+        button {
+            background-color: #2b485c;
+            /* Color de fondo del botón */
+            color: #000000;
+            /* Color del texto del botón */
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Estilo para el botón al pasar el ratón (hover) */
+        button:hover {
+            background-color: #2980b9;
+            /* Cambia el color de fondo al pasar el ratón */
+        }
+
+        /* Estilo para el botón activo (focus) */
+        button:focus {
+            outline: none;
+        }
+
+        /* Estilo para el mensaje de error (puedes personalizar según tus necesidades) */
+        .error-message {
+            color: #e74c3c;
+            /* Color del texto del mensaje de error */
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        /* Otros estilos según necesidades específicas */
+        .info-div {
+            padding: 20px;
+            text-align: center;
+            max-width: 300px;
+            margin: 20px auto;
+            background-color: #22ffbd;
+            border-radius: 5px;
+            display: none;
+            animation: fadeInUp 0.5s ease-in-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Estilos para la lista */
+
+    </style>
+</head>
+
+<body>
+
+    <!-- -------------------------Pagina Inicio------------------ -->
+    <div data-role="page" id="page1">
+        <div data-role="header">
+            <div class="title">
+                <h1>StoreGamer</h1>
+            </div>
+            <div data-role="footer">
+                <div class="navbar" data-role="navbar">
+                    <ul>
+                        <li><a href="#page1" data-icon="home" class="ui-btn-active">Inicio</a></li>
+                        <li><a href="#page2" data-icon="tag">Agregar Juego</a></li>
+                        <li><a href="#page3" data-icon="eye">Promciones</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div data-role="content">
+            <form class="ui-filterable">
+                <input data-type="search" id="searchForCollapsibleSetChildren" class="custom-search-input">
+            </form>
+
+            <div data-role="tabs">
+                <ul data-role="listview" data-inset="true" class="tablist-left">
+                    <% games.forEach((game, index)=> { %>
+                        <li><a href="#game_<%= index %>" data-ajax="false">
+                                <%= game.name_game%>
+                            </a></li>
+                        <% }) %>
+                </ul>
+                <% games.forEach((game, index)=> { %>
+                    <div id="game_<%= index %>" class="ui-body-d tablist-content">
+                        <h3>
+                            <%= game.name_game %>
+                        </h3>
+                        <ul data-role="listview" data-inset="true">
+                            <li>Codigo de barras: <%= game.barcode %>
+                            </li>
+                            <li>Nombre del Juego: <%= game.name_game %>
+                            </li>
+                            <li>Marca: <%= game.brand %>
+                            </li>
+                            <li>Precio de compra: <%= game.price %>
+                            </li>
+                            <li>Precio de costo: <%= game.cost %>
+                            </li>
+                            <li>Existencias: <%= game.stock %>
+                            </li>
+                            <li>Status: <%= game.status %>
+                            </li>
+    
+                            <li><a href="/<%= game.barcode %>" class="ui-btn">Editar</a></li>
+                            <li><a href="/delete/<%= game.barcode %>" class="ui-btn">Eliminar</a></li>
+                        </ul>
+                    </div>
+                    <% }) %>
+            </div>
+        </div>
+        <div class="info-div" id="infoDiv1">
+            <h3>Promociones en Videojuegos</h3>
+            <p>Mira nuestro Videojuegos en una oferta increible</p>
+            <a href="#" class="ui-btn ui-btn-b ui-corner-all" onclick="closeInfoDiv('infoDiv1')">Cerrar</a>
+        </div>
+        <a href="#" class="ui-btn ui-btn-b ui-corner-all" onclick="openInfoDiv('infoDiv1')">Promociones Increibles</a>
+
+        <script>
+            function openInfoDiv(divId) {
+                $("#" + divId).fadeIn();
+            }
+
+            function closeInfoDiv(divId) {
+                $("#" + divId).fadeOut();
+            }
+        </script>
+    </div>
+
+
+    <!-- -----------------------------Pagina Videojuegos----------------------- -->
+    <div data-role="page" id="page2">
+        <div data-role="header">
+            <div class="title">
+                <h1>StoreGamer</h1>
+            </div>
+            <div data-role="footer">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#page1" data-icon="home">Inicio</a></li>
+                        <li><a href="#page2" data-icon="tag" class="ui-btn-active">Videojuegos</a></li>
+                        <li><a href="#page3" data-icon="eye">Descuentos</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div data-role="content">
+            <form action="/" method="POST">
+                <input type="text" name="barcode" id="txt_barcode" placeholder="Folio">
+
+                <input type="text" name="name_game" id="txt_name_game" placeholder="Nombre del Juego">
+
+                <input type="text" name="description" id="txt_description" placeholder="Descripcion">
+
+                <input type="text" name="brand" id="txt_brand" placeholder="Marca">
+
+                <input type="text" name="cost" id="txt_cost" placeholder="Precio de Compra">
+
+                <input type="text" name="price" id="txt_price" placeholder="Precio de Venta">
+
+                <input type="number" name="stock" id="txt_stock" placeholder="Existencias">
+
+        
+
+                <label for="flip-6">Activo</label>
+                <select name="status" id="flip-6" data-role="slider" data-mini="true">
+                    <option value="0">No</option>
+                    <option value="1">Si</option>
+                </select>
+
+                <button type="submit" id="submit-6" class="ui-shadow ui-btn ui-corner-all ui-mini">Guardar</button>
+            </form>
+        </div>
+        <div data-role="footer">
+            <h5>Orlando Desarrollador</h5>
+        </div>
+    </div>
+
+    <!-- -------------- Pagina Promociones ----------- -->
+    <div data-role="page" id="page3">
+        <div data-role="header">
+            <div class="title">
+                <h1>StoreGamer</h1>
+            </div>
+            <div data-role="footer">
+                <div class="navbar" data-role="navbar">
+                    <ul>
+                        <li><a href="#page1" data-icon="home">Inicio</a></li>
+                        <li><a href="#page2" data-icon="tag">Videojuegos</a></li>
+                        <li><a href="#page3" data-icon="eye" data-icon="home" class="ui-btn-active">Descuentos</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div data-role="content">
+            <a href="#popupPhotoLandscape1" data-rel="popup" data-position-to="window"
+                class="ui-button ui-corner-all ui-shadow ui-button-inline">hasta 79% de descuento WOW</a>
+            <div data-role="popup" id="popupPhotoLandscape1" class="photopopup" data-overlay-theme="a"
+                data-corners="false" data-tolerance="30,15">
+                <a href="#" data-rel="back"
+                    class="ui-button ui-corner-all ui-shadow ui-button-a ui-button-icon-only ui-toolbar-header-button-right">Close
+                    <span class="ui-icon ui-icon-delete"></span></a><span>HALO 5 GUARDIANS $350</span>
+                <img src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2015/10/14/14/halo-5-guardians-indy.jpg"
+                    alt="Promoción 1">
+            </div>
+        <br><br><br><br><br>
+            <a href="#popupPhotoLandscape2" data-rel="popup" data-position-to="window"
+                class="ui-button ui-corner-all ui-shadow ui-button-inline">Lo mejor del deporte </a>
+            <div data-role="popup" id="popupPhotoLandscape2" class="photopopup" data-overlay-theme="a"
+                data-corners="false" data-tolerance="30,15">
+                <a href="#" data-rel="back"
+                    class="ui-button ui-corner-all ui-shadow ui-button-a ui-button-icon-only ui-toolbar-header-button-right">Close
+                    <span class="ui-icon ui-icon-delete"></span></a><span>Fifa 24 $1400</span>
+                <img src="https://www.gameit.es/wp-content/uploads/2023/07/IMG_3415.jpeg"
+                    alt="Promoción 2">
+            </div>
+            <br><br><br><br><br>
+            <a href="#popupPhotoLandscape3" data-rel="popup" data-position-to="window"
+                class="ui-button ui-corner-all ui-shadow ui-button-inline">Click ahora para ver mas</a>
+            <div data-role="popup" id="popupPhotoLandscape3" class="photopopup" data-overlay-theme="a"
+                data-corners="false" data-tolerance="30,15">
+                <a href="#" data-rel="back"
+                    class="ui-button ui-corner-all ui-shadow ui-button-a ui-button-icon-only ui-toolbar-header-button-right">Close
+                    <span class="ui-icon ui-icon-delete"></span></a><span>Assasins Creed $450</span>
+                <img src="https://staticctf.ubisoft.com/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/gp1E9ge25t3f3hbbCsGTO/9407bae1bd8c7192eee952982c2f181f/overview1.jpg"
+                    alt="Promoción 3">
+            </div>
+        </div>
+
+
+    </div>
+    <script>
+        $(document).on("pagecreate", function () {
+            $(".photopopup").on({
+                popupbeforeposition: function () {
+                    var maxHeight = $(window).height() - 60 + "px";
+                    $(".photopopup img").css("max-height", maxHeight);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
